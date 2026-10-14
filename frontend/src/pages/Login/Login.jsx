@@ -1,29 +1,30 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setMessage("");
+    setSubmitting(true);
 
     try {
-      await login({
-        email,
-        password,
-      });
-
-      setMessage("Login successful!");
+      await login({ email, password });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       setMessage(
-        error.response?.data?.message ||
-        "Login failed"
+        error.response?.data?.message || "Login failed"
       );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -33,37 +34,33 @@ const Login = () => {
 
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email</label>
-
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             value={email}
-            onChange={(event) =>
-              setEmail(event.target.value)
-            }
+            onChange={(event) => setEmail(event.target.value)}
             required
           />
         </div>
 
         <div>
-          <label>Password</label>
-
+          <label htmlFor="password">Password</label>
           <input
+            id="password"
             type="password"
             value={password}
-            onChange={(event) =>
-              setPassword(event.target.value)
-            }
+            onChange={(event) => setPassword(event.target.value)}
             required
           />
         </div>
 
-        <button type="submit">
-          Login
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Logging in..." : "Login"}
         </button>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p role="alert">{message}</p>}
     </div>
   );
 };

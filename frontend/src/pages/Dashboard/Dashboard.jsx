@@ -5,14 +5,19 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Adaptive Learning Dashboard</h1>
 
-      {user && (
-        <div>
-          <h2>Welcome, {user.name}</h2>
-          <p>{user.email}</p>
-        </div>
-      )}
+      <h2>
+        Welcome, {user?.name || "Learner"}!
+      </h2>
+
+      <p>
+        Email: {user?.email || "Loading profile..."}
+      </p>
+
+      <p>
+        Your personalized learning experience starts here.
+      </p>
 
       <button onClick={logout}>
         Logout
