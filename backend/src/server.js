@@ -5,6 +5,7 @@ require("dotenv").config();
 const pool = require("./config/database");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
+const behaviourRoutes = require("./routes/behaviourRoutes");
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/behaviour", behaviourRoutes);
 
 // Test backend route
 app.get("/", (req, res) => {
